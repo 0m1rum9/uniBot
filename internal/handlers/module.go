@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"unibot/internal/services"
+	"unibot/internal/repository"
 	"unibot/pkg/adapters/unix"
 
 	"gopkg.in/telebot.v4"
 )
 
 type module struct {
-	u *services.UserService
+	u repository.UserRepository
 }
 
 func (m module) Handle(c telebot.Context) error {
@@ -60,7 +60,7 @@ func (m module) Handle(c telebot.Context) error {
 	return c.Edit("Pick course:", buttons)
 }
 
-func NewModule(u *services.UserService) module {
+func NewModule(u repository.UserRepository) module {
 	return module{
 		u: u,
 	}

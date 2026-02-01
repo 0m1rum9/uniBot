@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"os"
-	serv "unibot/internal"
 	DB "unibot/internal/db"
 	"unibot/internal/handlers"
+	"unibot/internal/repository"
 	"unibot/internal/services"
 
 	"github.com/jackc/pgx/v5"
@@ -59,6 +59,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-		handlers.SetHandlers(b, services.CreateUserService(db, r), serv.NewNotificationService(b))
+	handlers.SetHandlers(b, repository.NewUserRepository(db, r), services.NewNotificationService(b))
 	b.Start()
 }

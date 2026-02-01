@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"unibot/internal/services"
+	"unibot/internal/repository"
 	"unibot/pkg/adapters/unix"
 
 	"gopkg.in/telebot.v4"
 )
 
 type course struct {
-	u *services.UserService
+	u repository.UserRepository
 }
 
 func (cr course) Handle(c telebot.Context) error {
@@ -65,7 +65,7 @@ func (cr course) Handle(c telebot.Context) error {
 
 }
 
-func NewCourse(u *services.UserService) course {
+func NewCourse(u repository.UserRepository) course {
 	return course{
 		u: u,
 	}

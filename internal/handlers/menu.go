@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 	"time"
-	"unibot/internal/services"
+	"unibot/internal/repository"
 	"unibot/pkg/adapters/unix"
 
 	"gopkg.in/telebot.v4"
 )
 
 type menu struct {
-	u *services.UserService
+	u repository.UserRepository
 }
 
 
@@ -50,6 +50,6 @@ func (m menu) Handle(c telebot.Context) error {
 
 }
 
-func NewMenu(u *services.UserService) menu {
+func NewMenu(u repository.UserRepository) menu {
 	return menu{u: u}
 }

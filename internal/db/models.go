@@ -9,10 +9,9 @@ import (
 )
 
 type User struct {
-	ID            int32
-	Username      pgtype.Text
-	ChatID        pgtype.Int8
-	LastMessageID pgtype.Int8
-	Login         pgtype.Text
-	Password      pgtype.Text
+	ID       int32
+	Username pgtype.Text
+	ChatID   pgtype.Int8
+	Login    pgtype.Text
+	Password pgtype.Text
 }

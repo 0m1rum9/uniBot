@@ -3,14 +3,14 @@ package handlers
 import (
 	"context"
 	"time"
-	"unibot/internal/services"
+	"unibot/internal/repository"
 	"unibot/pkg/adapters/unix"
 
 	"gopkg.in/telebot.v4"
 )
 
 type register struct {
-	u *services.UserService
+	u repository.UserRepository
 }
 
 func (r register) Handle(c telebot.Context) error {
@@ -34,18 +34,17 @@ func (r register) Handle(c telebot.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer cancel()
 
-	r.u.CreateUser(ctx, services.User{
+	r.u.CreateUser(ctx, repository.User{
 		Username:      c.Chat().Username,
 		ChatID:        c.Chat().ID,
 		Login:         login,
 		Password:      password,
-		LastMessageID: -1,
 	})
 	return c.Send("Registered!\nYou can now reach menu by typing anything")
 
 }
 
-func NewRegister(u *services.UserService) register {
+func NewRegister(u repository.UserRepository) register {
 
 	return register{
 		u: u,

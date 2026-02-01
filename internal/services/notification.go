@@ -1,5 +1,5 @@
-// Package serv provides bla
-package serv
+// Package services provides bla
+package services
 
 import (
 	"log"

@@ -12,23 +12,21 @@ import (
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO users(username, chat_id, last_message_id, login, password)
-VALUES($1, $2, $3, $4, $5)
+INSERT INTO users(username, chat_id, login, password)
+VALUES($1, $2, $3, $4)
 `
 
 type CreateUserParams struct {
-	Username      pgtype.Text
-	ChatID        pgtype.Int8
-	LastMessageID pgtype.Int8
-	Login         pgtype.Text
-	Password      pgtype.Text
+	Username pgtype.Text
+	ChatID   pgtype.Int8
+	Login    pgtype.Text
+	Password pgtype.Text
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 	_, err := q.db.Exec(ctx, createUser,
 		arg.Username,
 		arg.ChatID,
-		arg.LastMessageID,
 		arg.Login,
 		arg.Password,
 	)
@@ -36,7 +34,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, username, chat_id, last_message_id, login, password FROM users
+SELECT id, username, chat_id, login, password FROM users
 WHERE chat_id=$1 LIMIT 1
 `
 
@@ -47,7 +45,6 @@ func (q *Queries) GetUser(ctx context.Context, chatID pgtype.Int8) (User, error)
 		&i.ID,
 		&i.Username,
 		&i.ChatID,
-		&i.LastMessageID,
 		&i.Login,
 		&i.Password,
 	)

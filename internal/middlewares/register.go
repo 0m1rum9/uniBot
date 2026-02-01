@@ -4,17 +4,17 @@ package middlewares
 import (
 	"context"
 	"time"
-	"unibot/internal/services"
+	"unibot/internal/repository"
 
 	"gopkg.in/telebot.v4"
 )
 
 type register struct {
 	registeredHandler telebot.HandlerFunc
-	u                 *services.UserService
+	u                 repository.UserRepository
 }
 
-func NewRegisterMiddleware(registeredHandler telebot.HandlerFunc, u *services.UserService) register {
+func NewRegisterMiddleware(registeredHandler telebot.HandlerFunc, u repository.UserRepository) register {
 	return register{registeredHandler: registeredHandler, u: u}
 }
 

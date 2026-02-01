@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	serv "unibot/internal"
 	"unibot/internal/services"
+	"unibot/internal/repository"
 	"unibot/pkg/adapters/unix"
 
 	"gopkg.in/telebot.v4"
@@ -18,8 +18,8 @@ import (
 
 
 type topic struct {
-	u *services.UserService
-	n *serv.NotificationService
+	u repository.UserRepository
+	n *services.NotificationService
 }
 
 type lessonProgressInfo struct {
@@ -173,7 +173,7 @@ func makeProgressBar(elapsed, duration time.Duration) string {
 	
 }
 
-func NewTopic(u *services.UserService, n *serv.NotificationService) topic {
+func NewTopic(u repository.UserRepository, n *services.NotificationService) topic {
 	return topic{
 		u: u,
 		n: n,

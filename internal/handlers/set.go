@@ -2,17 +2,17 @@
 package handlers
 
 import (
-	serv "unibot/internal"
+	 "unibot/internal/services"
 	"unibot/internal/middlewares"
-	"unibot/internal/services"
+	"unibot/internal/repository"
 
 	"gopkg.in/telebot.v4"
 	"gopkg.in/telebot.v4/middleware"
 )
 
 func SetHandlers(b *telebot.Bot,
-	u *services.UserService,
-	n *serv.NotificationService,
+	u repository.UserRepository,
+	n *services.NotificationService,
 	) {
 
 	// Global handler for registered users
