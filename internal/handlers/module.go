@@ -42,6 +42,9 @@ func (m module) Handle(c telebot.Context) error {
 	buttons := &telebot.ReplyMarkup{}
 	row := []telebot.InlineButton{}
 	for i, course := range courses {
+		if course.IsPublic != true {
+			continue
+		}
 		row = append(row, telebot.InlineButton{
 			Unique: "course",
 			Text:   course.Title,

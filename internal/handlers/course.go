@@ -43,7 +43,10 @@ func (cr course) Handle(c telebot.Context) error {
 	row := []telebot.InlineButton{}
 
 	for i, topic := range course.Topics {
-		text := topic.Title
+		if !topic.IsPublic {
+			continue 
+		}
+		text := fmt.Sprintf("%d. ", i + 1) + topic.Title
 		if topic.IsPass {
 			text += "✅"
 		} else {
@@ -55,10 +58,8 @@ func (cr course) Handle(c telebot.Context) error {
 			Text:   text,
 		})
 
-		if i%2 == 0 || i == len(course.Topics)-1 {
-			buttons.InlineKeyboard = append(buttons.InlineKeyboard, row)
-			row = []telebot.InlineButton{}
-		}
+		buttons.InlineKeyboard = append(buttons.InlineKeyboard, row)
+		row = []telebot.InlineButton{}
 	}
 	return c.Edit("Watch", buttons)
 

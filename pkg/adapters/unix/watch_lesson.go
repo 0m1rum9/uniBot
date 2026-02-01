@@ -76,7 +76,7 @@ func doFinishReq(authToken, token, cookie string, lesson *Lesson) (map[string]an
 	if err != nil{
 		return map[string]any{}, err
 	}
-	if resp.StatusCode != http.StatusOK{
+	if resp.StatusCode != http.StatusCreated{
 		return map[string]any{}, ErrInvalidCSRF
 	}
 	defer resp.Body.Close()
@@ -101,6 +101,7 @@ func doCookieReq(token string) (string, error){
 		return "", err
 	}
 	if resp.StatusCode != http.StatusCreated{
+
 		return "", ErrInvalidCSRF 
 	}
 	defer resp.Body.Close()

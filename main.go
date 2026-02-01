@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"os"
+	serv "unibot/internal"
 	DB "unibot/internal/db"
 	"unibot/internal/handlers"
 	"unibot/internal/services"
@@ -23,11 +24,12 @@ func main() {
 		panic(err)
 	}
 
-	// Initializing connection
+	// Initializing connection to postgres
 	conn, err := pgx.Connect(ctx, fmt.Sprintf(
-		"postgres://%s:%s@localhost:5432/%s?sslmode=disable",
+		"postgres://%s:%s@%s:5432/%s?sslmode=disable",
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_DB"),
 	))
 	if err != nil {
@@ -38,7 +40,7 @@ func main() {
 	db := DB.New(conn)
 
 	r := redis.NewClient(&redis.Options{
-		Addr:         "127.0.0.1:6379",
+		Addr:         fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT")),
 		Password:     os.Getenv("REDIS_USER_PASSWORD"),
 		Username:     os.Getenv("REDIS_USER"),
 		DB:           0,
@@ -57,7 +59,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	handlers.SetHandlers(b, db, r, services.CreateUserService(db, r))
+		handlers.SetHandlers(b, services.CreateUserService(db, r), serv.NewNotificationService(b))
 	b.Start()
 }

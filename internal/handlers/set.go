@@ -2,19 +2,18 @@
 package handlers
 
 import (
-	"unibot/internal/db"
+	serv "unibot/internal"
 	"unibot/internal/middlewares"
 	"unibot/internal/services"
 
-	"github.com/redis/go-redis/v9"
 	"gopkg.in/telebot.v4"
 	"gopkg.in/telebot.v4/middleware"
 )
 
 func SetHandlers(b *telebot.Bot,
-	db *db.Queries,
-	r *redis.Client,
-	u *services.UserService) {
+	u *services.UserService,
+	n *serv.NotificationService,
+	) {
 
 	// Global handler for registered users
 	b.Use(middlewares.NewRegisterMiddleware(
@@ -25,11 +24,12 @@ func SetHandlers(b *telebot.Bot,
 		telebot.OnText,
 		NewStart(u).Handle,
 	)
-
+	// TODO create service layer
 	b.Handle("/register", NewRegister(u).Handle)
+
 	b.Handle(&telebot.InlineButton{Unique: "module"}, NewModule(u).Handle)
 	b.Handle(&telebot.InlineButton{Unique: "course"}, NewCourse(u).Handle)
-	b.Handle(&telebot.InlineButton{Unique: "topic"}, NewTopic(u).Handle)
 	b.Handle(&telebot.InlineButton{Unique: "course"}, NewCourse(u).Handle)
 
+	b.Handle(&telebot.InlineButton{Unique: "topic"}, NewTopic(u, n).Handle)
 }
